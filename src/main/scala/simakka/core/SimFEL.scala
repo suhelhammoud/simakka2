@@ -22,8 +22,11 @@ object SimFEL {
 }
 
 class SimFEL extends Actor
-  with SimEntityLookup with ActorLogging {
+  with SimEntityLookup with ActorLogging with SimTrace {
 
+  var simTime: Double = 0.0
+  val name = SimNames.fel.name()
+  val id: Long = getRefId(name).get
 
   //  val id = refName(SimNames.fel.name(), self)
 
@@ -54,6 +57,9 @@ class SimFEL extends Actor
 
     //send out events
     eventsToFire.foreach(ev => getRef(ev.dest).get ! ev)
+    //update fel event
+    if (eventsToFire.size > 0)
+      simTime = eventsToFire.head.time
   }
 
   def tick(): Unit = {
@@ -62,18 +68,24 @@ class SimFEL extends Actor
   }
 
   override def receive: Receive = {
-    case lst: List[SimEvent] => felQueue ++= lst
+    case lst: List[SimEvent] =>
+      simTrace("event list = {}", lst)
+      felQueue ++= lst
 
-    case m: SimEvent => felQueue += m
+    case m: SimEvent =>
+      simTrace("one event ={}", m)
+      felQueue += m
 
     case Done(id) =>
-      log.debug("done for id = {}", id)
+      simTrace("done for id = {}", id)
       currents.remove(id)
       tick()
 
 
     case LookAhead(lhId, lhTime) =>
       log.debug("LookAhead( {}, {})", lhId, lhTime)
+      simTrace("LookAhead( {}, {})", lhId, lhTime)
+
       if (lhTime < 0)
         lookAHeads.remove(lhId)
       else
