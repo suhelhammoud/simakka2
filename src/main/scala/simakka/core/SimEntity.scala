@@ -41,7 +41,7 @@ class SimEntity(val name: String, params: Option[String] = None)
 
   lazy val id = getRefId(name).get
 
-  val simTime = 0.0
+  var simTime = 0.0
   val lastEventTime = 0.0
   val outEvents = ArrayBuffer[SimEvent]()
   val autoEvents = true

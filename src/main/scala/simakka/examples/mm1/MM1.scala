@@ -7,7 +7,9 @@ import simakka.SimAkkaAppDriver
 import simakka.config.SimJConfig
 import simakka.core.SimApp.END_OF_SIMULATION
 import simakka.core.SimUtils.toJsonString
-import simakka.core.{SimEntity, SimUtils, Timed}
+import simakka.core.{SimEntity, SimTrace, SimUtils, Timed}
+
+
 
 object MM1 {
 
@@ -81,12 +83,12 @@ object MM1 {
 
     log.info("done SimAkkaAppDriver")
   }
-
-
 }
 
 class MM1(override val name: String, params: Option[String])
-  extends SimEntity(name, params) {
+  extends SimEntity(name, params) with SimTrace{
+
+//  val tr = LoggerFactory.getLogger("TRACE")
 
   override def initParams(data: String): Unit = {
     super.initParams(data)
@@ -95,8 +97,14 @@ class MM1(override val name: String, params: Option[String])
   }
 
   override def receive: Receive = {
-    case a: MM1.Arrive => log.info("arrive at time = {}", a.time)
-    case d: MM1.Depart => log.info("depart at time = {}", d.time)
+    case a: MM1.Arrive =>
+      simTime = a.time
+      simTrace("template =  {} end.", a.toString)
+      log.info("arrive at time = {}", a.time)
+    case d: MM1.Depart =>
+      simTime = d.time
+      simTrace("template =  {} end.", d.toString)
+      log.info("depart at time = {}", d.time)
     case _ => log.error("unknown message")
   }
 }
