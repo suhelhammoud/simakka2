@@ -4,7 +4,8 @@ import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import akka.util.Timeout
 import net.liftweb.json.{DefaultFormats, parse}
 import simakka.config.SimJEntity
-import simakka.core.SimFEL.{Done, LookAhead, SafeTime}
+import simakka.core.SimFEL.{LookAhead, SafeTime}
+import simakka.core.SimFELSeq.Done
 
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.duration._
@@ -24,7 +25,7 @@ object SimEntity {
     result
   }
 
-  val autoEvents = true
+  val autoEvents = false //TODO remove it
 
   def props(name: String, params: Option[String] = None)
   = Props(classOf[SimEntity], name, params)
@@ -35,9 +36,10 @@ object SimEntity {
 }
 
 class SimEntity(val name: String, params: Option[String] = None)
-  extends Actor with SimEntityLookup with ActorLogging with NameID {
+  extends Actor with SimEntityLookup
+    with ActorLogging with SimTrace with NameID {
 
-  val fel: ActorRef = getRef("fel").get
+  val fel: ActorRef = getRef(SimNames.fel.name()).get
 
   lazy val id = getRefId(name).get
 
@@ -164,9 +166,10 @@ class SimEntity(val name: String, params: Option[String] = None)
     val nextTime = simTime + delay
 
     val ev = SimEvent(nextTime, tag, src, dest, data)
-    if (SimEntity.autoEvents)
+    if (autoEvents){ //TODO should be available apart from handle message method
+      simTrace("schedule event {}", ev)
       fel ! ev
-    else
+    }else
       outEvents += ev
   }
 

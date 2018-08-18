@@ -1,6 +1,6 @@
 package simakka
 
-import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, Props}
+import akka.actor.{ActorRef, ActorSystem, Props}
 import akka.pattern.ask
 import akka.util.Timeout
 import org.slf4j.LoggerFactory
@@ -53,8 +53,11 @@ class SimAkkaAppDriver(val configPath: String) {
 
   /* SimFEL Actor */
   val fel = newActor(SimNames.fel.name(),
-    SimFEL.props())
-  log.info("Create Future Event List name = {}, id = {}",
+    SimFELSeq.props())
+//  val fel = newActor(SimNames.fel.name(),
+//    SimFEL.props())
+
+  log.info("Create Future Event List name = {}",
     SimNames.fel.name())
 
 

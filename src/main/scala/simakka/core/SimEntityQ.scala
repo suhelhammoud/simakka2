@@ -2,7 +2,7 @@ package simakka.core
 
 import akka.actor.{Actor, ActorRef, Stash}
 import simakka.core.SimEntityQ.SimPredicate
-import simakka.core.SimFEL.Done
+import simakka.core.SimFELSeq.Done
 
 object SimEntityQ {
   type SimPredicate = PartialFunction[Any, Boolean]

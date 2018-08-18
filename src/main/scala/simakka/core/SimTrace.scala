@@ -41,21 +41,21 @@ trait SimTrace {
         arg1, arg2)
   }
 
-  def simTraceTag(tag: String,
-                  template: String,
-                  arg1: Any, arg2: Any, arg3: Any): Unit = {
-    if (SimTrace._tr.isInfoEnabled)
-      SimTrace._tr.info(_preMessage(tag) + template,
-        arg1, arg2, arg3)
-  }
+//  def simTraceTag(tag: String,
+//                  template: String,
+//                  arg1: Any, arg2: Any, arg3: Any): Unit = {
+//    if (SimTrace._tr.isInfoEnabled)
+//      SimTrace._tr.info(_preMessage(tag) + template,
+//        arg1, arg2, arg3)
+//  }
 
-  def simTraceTag(tag: String,
-                  template: String,
-                  arg1: Any, arg2: Any, arg3: Any, arg4: Any): Unit = {
-    if (SimTrace._tr.isInfoEnabled)
-      SimTrace._tr.info(_preMessage(tag) + template,
-        arg1, arg2, arg3, arg4)
-  }
+//  def simTraceTag(tag: String,
+//                  template: String,
+//                  arg1: Any, arg2: Any, arg3: Any, arg4: Any): Unit = {
+//    if (SimTrace._tr.isInfoEnabled)
+//      SimTrace._tr.info(_preMessage(tag) + template,
+//        arg1, arg2, arg3, arg4)
+//  }
 
   def simTrace(template: String): Unit = {
     if (SimTrace._tr.isInfoEnabled)
@@ -76,18 +76,18 @@ trait SimTrace {
         arg1, arg2)
   }
 
-  def simTrace(template: String,
-               arg1: Any, arg2: Any, arg3: Any): Unit = {
-    if (SimTrace._tr.isInfoEnabled)
-      SimTrace._tr.info(_preMessage() + template,
-        arg1, arg2, arg3)
-  }
+//  def simTrace(template: String,
+//               arg1: Any, arg2: Any, arg3: Any): Unit = {
+//    if (SimTrace._tr.isInfoEnabled)
+//      SimTrace._tr.info(_preMessage() + template,
+//        arg1, arg2, arg3)
+//  }
 
-  def simTrace(template: String,
-               arg1: Any, arg2: Any, arg3: Any, arg4: Any): Unit = {
-    if (SimTrace._tr.isInfoEnabled)
-      SimTrace._tr.info(_preMessage() + template,
-        arg1, arg2, arg3, arg4)
-  }
+//  def simTrace(template: String,
+//               arg1: Any, arg2: Any, arg3: Any, arg4: Any): Unit = {
+//    if (SimTrace._tr.isInfoEnabled)
+//      SimTrace._tr.info(_preMessage() + template,
+//        arg1, arg2, arg3, arg4)
+//  }
 
 }

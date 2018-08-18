@@ -1,18 +1,21 @@
 package simakka.core
 
 import akka.actor.{Actor, ActorLogging, Props}
-import simakka.core.SimFEL.{Done, SafeTime}
+import simakka.core.SimFEL.{ SafeTime}
 import simakka.core.SimFEL.LookAhead
+import simakka.core.SimFELSeq.Done
 
 
 object SimFEL {
   def props() = Props(classOf[SimFEL])
 
+  val isSequential = true
+
   /*Indicate Entity is:
    * 1 - Done processing event(s)
    * 2 - No more events expected from this
    * 3 - Ready to receive next event*/
-  case class Done(id: Long)
+//  case class Done(id: Long)
 
   /* Transparent message should work without it  */
   case class LookAhead(id: Long, time: Double)
@@ -37,6 +40,7 @@ class SimFEL extends Actor
 
   def canFireEvents(): Boolean = {
     if (felQueue.size == 0) return false
+
     if (currents.size == 0) return true
     //there are at least one futureEvent with lower time than current fired events
     return currents.forall(p => p._2 >= felQueue.head.time)
@@ -67,6 +71,12 @@ class SimFEL extends Actor
       extractAndFireEvents()
   }
 
+  def tickSeq(): Unit ={
+    if(felQueue.size == 0) return
+    //extract and fire events
+    val headEventTime = felQueue.head.time
+    felQueue.takeWhile( ev => ev.time == headEventTime)
+  }
   override def receive: Receive = {
     case lst: List[SimEvent] =>
       simTrace("event list = {}", lst)

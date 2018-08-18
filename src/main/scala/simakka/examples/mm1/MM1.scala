@@ -59,6 +59,9 @@ object MM1 {
       val mm1 = newEntity("MM1",
         MM1.props2("MM1", mm1config))
 
+      val mm1Driver = newEntity("mm1d",
+        MM1Driver.props("mm1d"))
+
       //      val mm1 =
       override def initSimulation(): Unit = {
         super.initSimulation()
@@ -68,6 +71,8 @@ object MM1 {
 
       override def runSimulation(): Unit = {
         super.runSimulation()
+
+        mm1Driver ! "Let's start generating random samples"
         log.info("more run behaviour")
         mm1 ! Arrive(22)
         mm1 ! Arrive(33)
