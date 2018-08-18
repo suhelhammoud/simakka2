@@ -1,0 +1,6 @@
+{
+  "interArrival": 10.0,
+  "service": 5.0,
+  "qCapacity": 100,
+  "endTime": 1000
+}

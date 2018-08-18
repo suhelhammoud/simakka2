@@ -1,0 +1,20 @@
+{
+  "name": "ApplicationName",
+  "paths": {
+    "rootPath": "data/run",
+    "outPath": "out"
+  },
+  "trace": {
+    "useTracing": false,
+    "tracePath": "trace",
+    "traceLevel": 2
+  },
+  "stat": {
+    "collector": "simakka.stat.SimStatCollectorFile",
+    "outPath": "stat"
+  },
+  "entity": {
+    "lookahead": 0.0,
+    "autoEvents": false
+  }
+}
