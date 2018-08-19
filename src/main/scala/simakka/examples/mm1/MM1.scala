@@ -1,13 +1,12 @@
 package simakka.examples.mm1
 
-import akka.actor.{PoisonPill, Props}
+import akka.actor.Props
 import net.liftweb.json.DefaultFormats
 import org.slf4j.LoggerFactory
 import simakka.SimAkkaAppDriver
 import simakka.config.SimJConfig
-import simakka.core.SimApp.END_OF_SIMULATION
 import simakka.core.SimUtils.toJsonString
-import simakka.core.{SimEntity, SimTrace, SimUtils, Timed}
+import simakka.core._
 
 
 
@@ -74,12 +73,12 @@ object MM1 {
 
         mm1Driver ! "Let's start generating random samples"
         log.info("more run behaviour")
-        mm1 ! Arrive(22)
-        mm1 ! Arrive(33)
-        mm1 ! Depart(44)
-
-        mm1 ! PoisonPill
-        app ! END_OF_SIMULATION
+//        mm1 ! Arrive(22)
+//        mm1 ! Arrive(33)
+//        mm1 ! Depart(44)
+//
+//        mm1 ! PoisonPill
+//        app ! END_OF_SIMULATION
       }
     }
 
@@ -93,23 +92,36 @@ object MM1 {
 class MM1(override val name: String, params: Option[String])
   extends SimEntity(name, params) with SimTrace{
 
-//  val tr = LoggerFactory.getLogger("TRACE")
-
   override def initParams(data: String): Unit = {
     super.initParams(data)
     log.debug("initParams with data = {}", data)
 
   }
 
-  override def receive: Receive = {
-    case a: MM1.Arrive =>
-      simTime = a.time
-      simTrace("template =  {} end.", a.toString)
-      log.info("arrive at time = {}", a.time)
-    case d: MM1.Depart =>
-      simTime = d.time
-      simTrace("template =  {} end.", d.toString)
-      log.info("depart at time = {}", d.time)
-    case _ => log.error("unknown message")
+
+  /**
+    * Entity Logic
+    *
+    * @param msg simEvent to be processed
+    * @return
+    */
+  override def handleMessage(msg: SimEvent): Seq[SimEvent] = {
+    simTraceTag("EVENT", msg.toString)
+    Nil
   }
+
+//  override def receive: Receive = {
+//    case a: MM1.Arrive =>
+//      simTime = a.time
+//      simTrace("template =  {} end.", a.toString)
+//      log.info("arrive at time = {}", a.time)
+//    case d: MM1.Depart =>
+//      simTime = d.time
+//      simTrace("template =  {} end.", d.toString)
+//      log.info("depart at time = {}", d.time)
+//    case m: Any =>
+//      simTrace("unknown message {}", m)
+//      log.error("unknown message {}", m)
+//  }
+
 }

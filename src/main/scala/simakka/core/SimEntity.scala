@@ -44,7 +44,7 @@ class SimEntity(val name: String, params: Option[String] = None)
   lazy val id = getRefId(name).get
 
   var simTime = 0.0
-  val lastEventTime = 0.0
+  var lastEventTime = 0.0
   val outEvents = ArrayBuffer[SimEvent]()
   val autoEvents = true
 
@@ -181,7 +181,8 @@ class SimEntity(val name: String, params: Option[String] = None)
     */
   def handleMessage(msg: SimEvent): Seq[SimEvent] = {
     log.debug("handle message {}", msg)
-    Nil
+    simTrace("handle message {}", msg)
+    List()
   }
 
 
@@ -189,6 +190,9 @@ class SimEntity(val name: String, params: Option[String] = None)
 
     case se: SimEvent =>
       log.debug("entity {} received {}", name, se)
+      lastEventTime = simTime
+      simTime = se.time
+
       handleMessage(se)
       if (outEvents.nonEmpty) {
         fel ! outEvents.toList

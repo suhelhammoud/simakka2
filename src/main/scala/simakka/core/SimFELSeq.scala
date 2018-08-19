@@ -27,6 +27,8 @@ class SimFELSeq extends Actor
   var lastEntity: Long = -1;
 
   log.info("FEL_SEQ name = {}, id = {}", name, id)
+  simTrace("FEL_SEQ name = {}, id = {}", name, id)
+
   def tick(): Unit = {
     if (felQueue.size == 0) return
     val eventToFire = felQueue.dequeue()
@@ -35,7 +37,6 @@ class SimFELSeq extends Actor
     simTrace("event to fire = {}", eventToFire)
     getRef(eventToFire.dest).get ! eventToFire
     lastEntity = eventToFire.dest
-
   }
 
   override def receive: Receive = {
@@ -46,6 +47,7 @@ class SimFELSeq extends Actor
     case m: SimEvent =>
       simTrace("one event ={}", m)
       felQueue += m
+      tick()
 
     case Done(id) =>
       simTrace("Done({}), last {} ", id, lastEntity)
@@ -62,6 +64,8 @@ class SimFELSeq extends Actor
       simTrace("SafeTime( {}, {})", stId, stTime)
       tick()
 
-    case _ => log.error("unknown message")
+    case _ =>
+      simTrace("Recieved unknown message")
+      log.error("unknown message")
   }
 }
