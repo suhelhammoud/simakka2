@@ -19,7 +19,7 @@ class MM1Driver(override val name: String,
   val mm1id = getRefId("MM1").get
 
   def startEvents(): Unit = {
-    1.to(100).foreach( i => {
+    1.to(10).foreach( i => {
       t = t + rnd.sample()
       scheduleID(t, 444, mm1id, Some("suhel data"))
     })

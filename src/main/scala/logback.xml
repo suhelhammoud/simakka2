@@ -11,7 +11,7 @@
     </appender>
 
     <appender name="TRACE" class="ch.qos.logback.core.FileAppender">
-        <file>trace/trace-${logFileTimeStamp}.log</file>
+        <file>trace/trace-${logFileTimeStamp}.csv</file>
         <append>true</append>
         <encoder>
             <pattern>%m%n%rEx</pattern>

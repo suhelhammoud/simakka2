@@ -5,6 +5,12 @@ import org.slf4j.{Logger, LoggerFactory}
 
 object SimTrace {
   private val _tr: Logger = LoggerFactory.getLogger("SIMTRACE")
+
+  def writeHeader(): Unit = {
+    if (SimTrace._tr.isInfoEnabled)
+      SimTrace._tr.info("time, id, name, tag, message")
+  }
+
 }
 
 trait SimTrace {

@@ -46,7 +46,9 @@ class SimEntity(val name: String, params: Option[String] = None)
   var simTime = 0.0
   var lastEventTime = 0.0
   val outEvents = ArrayBuffer[SimEvent]()
+
   val autoEvents = true
+  val allowStash = false
 
   var lookahead = 0.0
 
@@ -80,6 +82,20 @@ class SimEntity(val name: String, params: Option[String] = None)
   def initParams(data: String): Unit = {
     log.debug("initParams({})", data)
   }
+
+
+  def pause(delay: Double): Unit = {
+
+  }
+
+  def process(delay: Double): Unit = {
+
+  }
+
+  def pauseFor(from: Long, timeout: Double = Double.MaxValue): Unit = {
+
+  }
+
 
   /**
     * Send local events
@@ -166,10 +182,10 @@ class SimEntity(val name: String, params: Option[String] = None)
     val nextTime = simTime + delay
 
     val ev = SimEvent(nextTime, tag, src, dest, data)
-    if (autoEvents){ //TODO should be available apart from handle message method
+    if (autoEvents) { //TODO should be available apart from handle message method
       simTrace("schedule event {}", ev)
       fel ! ev
-    }else
+    } else
       outEvents += ev
   }
 

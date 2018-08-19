@@ -18,6 +18,7 @@ class SimAkkaAppDriver(val configPath: String) {
 
   val log = LoggerFactory.getLogger("Driver")
 
+  SimTrace.writeHeader
 
   implicit val timeout = Timeout(20 seconds)
 
