@@ -10,12 +10,9 @@ object SimApp {
 
   def props(configPath: String) = Props(classOf[SimApp], configPath)
 
-
   case class CreateChild(name: String, propVal: Props)
 
-
   case object END_OF_SIMULATION
-
 }
 
 /**
@@ -34,9 +31,7 @@ class SimApp(configPath: String)
   lazy val fel = getRef(SimNames.fel.name())
   lazy val statCollector = getRef(SimNames.statCollector.name())
 
-
   override def receive: Receive = {
-
     case CreateChild(name, propVal) =>
       log.info("create child {} from {}", name, sender())
       val ref = context.actorOf(propVal, name)

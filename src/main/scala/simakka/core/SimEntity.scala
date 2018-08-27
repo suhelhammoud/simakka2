@@ -4,16 +4,12 @@ import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import akka.util.Timeout
 import net.liftweb.json.{DefaultFormats, parse}
 import simakka.config.SimJEntity
-import simakka.core.SimFEL.{LookAhead, SafeTime}
-import simakka.core.SimFELSeq.Done
-
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.duration._
 
-
-trait NameID {
+trait NameMe {
   val name: String
-  val id: Long
+  val me: Long
 }
 
 object SimEntity {
@@ -27,21 +23,19 @@ object SimEntity {
 
   val autoEvents = false //TODO remove it
 
-  def props(name: String, params: Option[String] = None)
-  = Props(classOf[SimEntity], name, params)
+  def props(name: String, params: Option[String] = None) =
+    Props(classOf[SimEntity], name, params)
 
   // if time < 0 done is true
-
-
 }
 
 class SimEntity(val name: String, params: Option[String] = None)
   extends Actor with SimEntityLookup
-    with ActorLogging with SimTrace with NameID {
+    with ActorLogging with SimTrace with NameMe {
 
   val fel: ActorRef = getRef(SimNames.fel.name()).get
 
-  lazy val id = getRefId(name).get
+  lazy val me = getRefId(name).get
 
   var simTime = 0.0
   var lastEventTime = 0.0
@@ -52,21 +46,18 @@ class SimEntity(val name: String, params: Option[String] = None)
 
   var lookahead = 0.0
 
-  def setLookAhead(lh: Double): Unit = {
-    lookahead = lh
-    fel ! LookAhead(id, lh)
+  //TODO
+  def setLookAhead(lhValue: Double): Unit = {
+    lookahead = lhValue
+    //    fel ! LookAhead(me, lhValue, )
   }
 
   def removeLookAhead(): Unit = {
     setLookAhead(-1)
   }
 
-  def setSafeTime(st: Double): Unit = {
-    fel ! SafeTime(id, st)
-  }
-
   def done(): Unit = {
-    fel ! Done(id)
+    fel ! me
   }
 
   /*Used as timeout for synchronous calls*/
@@ -85,17 +76,16 @@ class SimEntity(val name: String, params: Option[String] = None)
 
 
   def pause(delay: Double): Unit = {
-
+    //TODO
   }
 
   def process(delay: Double): Unit = {
-
+    //TODO
   }
 
   def pauseFor(from: Long, timeout: Double = Double.MaxValue): Unit = {
-
+    //TODO
   }
-
 
   /**
     * Send local events
@@ -105,9 +95,8 @@ class SimEntity(val name: String, params: Option[String] = None)
     * @param data
     */
   def scheduleLocal(delay: Double, tag: Int, data: Option[Any] = None): Unit = {
-    schedule(delay, tag, id, id, data)
+    schedule(delay, tag, me, me, data)
   }
-
 
   /**
     * Send event from this SimEntity to other SimEntity by its id
@@ -118,7 +107,7 @@ class SimEntity(val name: String, params: Option[String] = None)
     * @param data
     */
   def scheduleID(delay: Double, tag: Int, dest: Long, data: Option[Any] = None): Unit = {
-    schedule(delay, tag, id, dest, data)
+    schedule(delay, tag, me, dest, data)
   }
 
   /**
@@ -136,7 +125,7 @@ class SimEntity(val name: String, params: Option[String] = None)
     if (to == None) {
       log.error("Could not find id for on of actor : {}", dest)
     } else {
-      schedule(delay, tag, id, to.get, data)
+      schedule(delay, tag, me, to.get, data)
     }
   }
 
@@ -201,7 +190,6 @@ class SimEntity(val name: String, params: Option[String] = None)
     List()
   }
 
-
   override def receive: Receive = {
 
     case se: SimEvent =>
@@ -214,14 +202,13 @@ class SimEntity(val name: String, params: Option[String] = None)
         fel ! outEvents.toList
         outEvents.clear()
       }
-
       done()
 
     case _ => log.debug("received a message")
   }
 
   def toSting() = {
-    s"${getClass.getName}, name = $name, id = $id"
+    s"${getClass.getName}, name = $name, id = $me"
   }
 
 }

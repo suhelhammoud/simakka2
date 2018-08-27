@@ -1,13 +1,10 @@
 package simakka.core
 
 import akka.actor.{Actor, ActorRef, Stash}
-import simakka.core.SimEntityQ.SimPredicate
-import simakka.core.SimFELSeq.Done
 
 object SimEntityQ {
   type SimPredicate = PartialFunction[Any, Boolean]
 }
-
 
 class SimEntityQ(override val name: String)
   extends SimEntity(name) with Stash {
@@ -16,7 +13,6 @@ class SimEntityQ(override val name: String)
   val receivers = Map[String, Actor.Receive](
     "main" -> receive
   )
-
 
   //  def predicate2(sp: SimPredicate, rName: Option[String] = None): Receive = {
   //    if (rName.isEmpty)
@@ -49,14 +45,12 @@ class SimEntityQ(override val name: String)
     })(r)
   }
 
-
   override def receive: Receive = {
 
     case se: SimEvent if se.tag == 3 =>
       process(4) {
         case _ => println("delay end callback")
       }
-
       val wf = waitFrom(4)(_)
 
     case se: SimEvent =>
@@ -66,7 +60,7 @@ class SimEntityQ(override val name: String)
         outEvents.clear()
       }
 
-      fel ! Done(id)
+      fel ! Done(me)
 
     case _ => println("received a message")
   }

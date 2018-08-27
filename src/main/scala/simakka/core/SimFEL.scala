@@ -1,69 +1,115 @@
 package simakka.core
 
 import akka.actor.{Actor, ActorLogging, Props}
-import simakka.core.SimFEL.{ SafeTime}
-import simakka.core.SimFEL.LookAhead
-import simakka.core.SimFELSeq.Done
 
+import scala.collection.mutable
 
 object SimFEL {
   def props() = Props(classOf[SimFEL])
-
-  val isSequential = true
-
-  /*Indicate Entity is:
-   * 1 - Done processing event(s)
-   * 2 - No more events expected from this
-   * 3 - Ready to receive next event*/
-//  case class Done(id: Long)
-
-  /* Transparent message should work without it  */
-  case class LookAhead(id: Long, time: Double)
-
-  case class SafeTime(id: Long, time: Double)
-
 }
 
 class SimFEL extends Actor
-  with SimEntityLookup with ActorLogging with SimTrace {
+  with SimEntityLookup with ActorLogging with SimTrace with NameMe {
 
-  var simTime: Double = 0.0
   val name = SimNames.fel.name()
-  val id: Long = getRefId(name).get
+  val me: Long = getRefId(name).get
 
-  //  val id = refName(SimNames.fel.name(), self)
-
+  /**
+    * contains two types of elements
+    * SimEvent:
+    * SimPredicate[Timed]
+    */
   val felQueue = PriorityEventQueue.newInstance()
-  val lookAHeads = new collection.mutable.LongMap[Double]
+
+  /**
+    * lookahead values for entities
+    */
+  val lookAheads = new collection.mutable.LongMap[LookAhead]
+
+  /**
+    * predicates with conditions to be matched
+    */
+  val predicates = new mutable.LongMap[SimPredicate]
+
+  /* contains current entities ids yet to acknowledge fired events */
   val currents = new collection.mutable.LongMap[Double]
 
+  var simTime: Double = 0.0
 
   def canFireEvents(): Boolean = {
     if (felQueue.size == 0) return false
 
     if (currents.size == 0) return true
+    //TODO do we need simTime here ?
     //there are at least one futureEvent with lower time than current fired events
-    return currents.forall(p => p._2 >= felQueue.head.time)
+    return currents.values.forall(_ >= felQueue.head.time)
   }
 
   def extractAndFireEvents() = {
+    val nextSimTime = felQueue.head.time
+
     val eventsToFire = felQueue.takeWhile(p => p.time < currents.values.min)
     assert(eventsToFire.size > 0)
     log.debug("events to fire size = {}", eventsToFire.size)
 
     felQueue.drop(eventsToFire.size)
 
-    eventsToFire.foreach(f => {
-      val addition = if (lookAHeads.contains(f.dest))
-        lookAHeads.get(f.dest).get else 0.0
-      currents.put(f.dest, f.time + addition)
-    })
+    eventsToFire.foreach {
+      case se: SimEvent =>
+        fireSimEvent(se)
 
-    //send out events
-    eventsToFire.foreach(ev => getRef(ev.dest).get ! ev)
-    //update fel event
-    if (eventsToFire.size > 0)
-      simTime = eventsToFire.head.time
+      case sp: SimTimedPredicate =>
+        fireSimPredicate(sp)
+
+      case _ => throw new Exception("Not defined")
+    }
+    simTime = nextSimTime
+  }
+
+  def fire(v: Any, target: Long): Unit = {
+    getRef(target).get ! v
+  }
+
+  def lookAheadBeforeFiring(target: Long, time: Double): Unit = {
+    //check lookahead and setup current time
+    val lh = lookAheads.get(target)
+    if (lh.isEmpty)
+      currents.put(target, time)
+    else lh.get.getType() match {
+      case LookAhead.ONCE =>
+        currents.update(target, time + lh.get.step)
+        lookAheads.remove(target)
+      case LookAhead.REPEATED =>
+        currents.update(target, time + lh.get.step)
+      case _ => {}
+    }
+  }
+
+  def fireSimPredicate(sp: SimTimedPredicate): Unit = {
+    val entry = predicates.remove(sp.target)
+    if (entry.isDefined) {
+      lookAheadBeforeFiring(sp.target, sp.time)
+      fire(sp, sp.target)
+    }
+  }
+
+  def fireSimEvent(se: SimEvent): Unit = {
+    //check for predicate
+    val pr = predicates.get(se.dest)
+
+    val checkLookAhead = if (pr.isEmpty)
+      true
+    else if (pr.get.isMatching(se)) {
+      //no timeout is triggered yet
+      predicates.remove(se.dest)
+      //TODO what about TimedPredicates which also have an entry in felQueue ?
+      true
+    } else false //predicate exists but does not match
+
+    if (checkLookAhead)
+      lookAheadBeforeFiring(se.dest, se.time)
+
+    fire(se, se.dest)
   }
 
   def tick(): Unit = {
@@ -71,43 +117,45 @@ class SimFEL extends Actor
       extractAndFireEvents()
   }
 
-  def tickSeq(): Unit ={
-    if(felQueue.size == 0) return
-    //extract and fire events
-    val headEventTime = felQueue.head.time
-    felQueue.takeWhile( ev => ev.time == headEventTime)
-  }
   override def receive: Receive = {
-    case lst: List[SimEvent] =>
-      simTrace("event list = {}", lst)
-      felQueue ++= lst
-
-    case m: SimEvent =>
-      simTrace("one event ={}", m)
-      felQueue += m
-
-    case Done(id) =>
-      simTrace("done for id = {}", id)
-      currents.remove(id)
-      tick()
-
-
-    case LookAhead(lhId, lhTime) =>
-      log.debug("LookAhead( {}, {})", lhId, lhTime)
-      simTrace("LookAhead( {}, {})", lhId, lhTime)
-
-      if (lhTime < 0)
-        lookAHeads.remove(lhId)
-      else
-        lookAHeads.update(lhId, lhTime)
-      tick()
-
-    case SafeTime(stId, stTime) =>
-      log.debug("SafeTime( {}, {})", stId, stTime)
-      assert(currents.contains(stId))
-      currents.update(stId, stTime)
+    case lst: List[Any] =>
+      handleList(lst)
       tick()
 
     case _ => log.error("unknown message")
+  }
+
+  //ak message
+  def handleList(lst: List[Any]) = {
+    if (!(lst.last.isInstanceOf[Long]))
+      throw new Exception("last element in list is not Done ")
+
+    val from = lst.last.asInstanceOf[Long]
+    currents.remove(from)
+
+    lst.asInstanceOf[List].foreach {
+      case se: SimEvent =>
+        if (se.time >= simTime)
+          felQueue += se
+
+      case lh: LookAhead =>
+        if (lh.isToRemoveAllSafe)
+          lookAheads.remove(lh.target)
+        else
+          lookAheads.update(lh.target, lh)
+
+      case p: SimTimedPredicate => //keep this order before case SimPredicate
+        if (p.time >= simTime) {
+          predicates.update(p.target, p)
+          felQueue += p
+        }
+
+      case p: SimPredicate =>
+        predicates.update(p.target, p)
+
+      case id: Long => currents.remove(id) //TODO remove later
+
+      case _ => println(s"message not known {}")
+    }
   }
 }

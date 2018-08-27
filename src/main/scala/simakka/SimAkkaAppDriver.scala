@@ -54,7 +54,7 @@ class SimAkkaAppDriver(val configPath: String) {
 
   /* SimFEL Actor */
   val fel = newActor(SimNames.fel.name(),
-    SimFELSeq.props())
+    SimFEL.props())
 //  val fel = newActor(SimNames.fel.name(),
 //    SimFEL.props())
 

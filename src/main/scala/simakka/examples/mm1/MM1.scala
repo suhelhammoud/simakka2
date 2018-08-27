@@ -8,23 +8,19 @@ import simakka.config.SimJConfig
 import simakka.core.SimUtils.toJsonString
 import simakka.core._
 
-
-
 object MM1 {
-
   val log = LoggerFactory.getLogger(MM1.getClass.getName)
 
   case class Arrive(val time: Double) extends Timed
 
   case class Depart(val time: Double) extends Timed
 
-
   def props2(name: String, data: Any) = {
     props(name, Some(toJsonString(data)))
   }
 
-  def props(name: String, params: Option[String] = None)
-  = Props(classOf[MM1], name, params)
+  def props(name: String, params: Option[String] = None) =
+    Props(classOf[MM1], name, params)
 
   case class MM1Config(interArrival: Double,
                        service: Double,
@@ -37,7 +33,6 @@ object MM1 {
     SimUtils.toJValueFromPath(filename)
       .extract[MM1Config]
   }
-
 
   def main(args: Array[String]): Unit = {
     val configPath = "data/config/config.json"
@@ -64,8 +59,6 @@ object MM1 {
       //      val mm1 =
       override def initSimulation(): Unit = {
         super.initSimulation()
-
-
       }
 
       override def runSimulation(): Unit = {
@@ -73,31 +66,27 @@ object MM1 {
 
         mm1Driver ! "Let's start generating random samples"
         log.info("more run behaviour")
-//        mm1 ! Arrive(22)
-//        mm1 ! Arrive(33)
-//        mm1 ! Depart(44)
-//
-//        mm1 ! PoisonPill
-//        app ! END_OF_SIMULATION
+        //        mm1 ! Arrive(22)
+        //        mm1 ! Arrive(33)
+        //        mm1 ! Depart(44)
+        //
+        //        mm1 ! PoisonPill
+        //        app ! END_OF_SIMULATION
       }
     }
-
     appDriver.initSimulation()
     appDriver.runSimulation()
-
     log.info("done SimAkkaAppDriver")
   }
 }
 
 class MM1(override val name: String, params: Option[String])
-  extends SimEntity(name, params) with SimTrace{
+  extends SimEntity(name, params) with SimTrace {
 
   override def initParams(data: String): Unit = {
     super.initParams(data)
     log.debug("initParams with data = {}", data)
-
   }
-
 
   /**
     * Entity Logic
@@ -111,18 +100,18 @@ class MM1(override val name: String, params: Option[String])
     Nil
   }
 
-//  override def receive: Receive = {
-//    case a: MM1.Arrive =>
-//      simTime = a.time
-//      simTrace("template =  {} end.", a.toString)
-//      log.info("arrive at time = {}", a.time)
-//    case d: MM1.Depart =>
-//      simTime = d.time
-//      simTrace("template =  {} end.", d.toString)
-//      log.info("depart at time = {}", d.time)
-//    case m: Any =>
-//      simTrace("unknown message {}", m)
-//      log.error("unknown message {}", m)
-//  }
+  //  override def receive: Receive = {
+  //    case a: MM1.Arrive =>
+  //      simTime = a.time
+  //      simTrace("template =  {} end.", a.toString)
+  //      log.info("arrive at time = {}", a.time)
+  //    case d: MM1.Depart =>
+  //      simTime = d.time
+  //      simTrace("template =  {} end.", d.toString)
+  //      log.info("depart at time = {}", d.time)
+  //    case m: Any =>
+  //      simTrace("unknown message {}", m)
+  //      log.error("unknown message {}", m)
+  //  }
 
 }

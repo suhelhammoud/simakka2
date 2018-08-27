@@ -2,9 +2,6 @@ package simakka.distributions
 
 import scala.util.Random
 
-/**
-  * Created by Suhel on 6/10/16.
-  */
 class SimRndExp(val name: String, val mean: Double)
   extends SimRndContinuousGenerator {
 

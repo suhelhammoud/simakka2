@@ -2,9 +2,6 @@ package simakka.distributions
 
 import scala.util.Random
 
-/**
-  * Created by Suhel on 6/10/16.
-  */
 class SimRndUniform(val name: String, lower: Double, upper: Double) extends SimRndContinuousGenerator {
   assert(upper > lower)
   val rnd = Random

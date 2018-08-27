@@ -10,7 +10,6 @@ object SimTrace {
     if (SimTrace._tr.isInfoEnabled)
       SimTrace._tr.info("time, id, name, tag, message")
   }
-
 }
 
 trait SimTrace {
@@ -18,12 +17,12 @@ trait SimTrace {
 
   def simTime: Double
 
-  def id: Long
+  def me: Long
 
   def name: String
 
   def _preMessage(tag: String = "") =
-    f"$simTime%4.4f, $id%6d, $name, $tag%8s, "
+    f"$simTime%4.4f, $me%6d, $name, $tag%8s, "
 
   def simTraceTag(tag: String,
                   template: String): Unit = {
@@ -95,5 +94,4 @@ trait SimTrace {
 //      SimTrace._tr.info(_preMessage() + template,
 //        arg1, arg2, arg3, arg4)
 //  }
-
 }

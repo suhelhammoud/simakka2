@@ -1,8 +1,5 @@
 package simakka.distributions
 
-/**
-  * Created by Suhel on 6/10/16.
-  */
 trait SimRndGenerator {
 
   val name: String

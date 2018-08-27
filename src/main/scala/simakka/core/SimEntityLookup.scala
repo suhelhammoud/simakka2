@@ -1,9 +1,7 @@
 package simakka.core
 
 import java.util.concurrent.atomic.AtomicLong
-
 import akka.actor.{Actor, ActorRef, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider}
-
 
 /**
   * to be extended by any class or to be used as an akka Extension
@@ -11,7 +9,6 @@ import akka.actor.{Actor, ActorRef, ExtendedActorSystem, Extension, ExtensionId,
 trait SimEntityLookup {
   self: Actor =>
   val entityLookUp = SimEntityLookupExtension(context.system)
-
 
   def getRef(name: String) =
     entityLookUp.getRef(name)
@@ -36,7 +33,6 @@ trait SimEntityLookup {
 
   def toStringRef() =
     entityLookUp.toStringRef()
-
 }
 
 class SimEntityLookupExtensionImp extends Extension {
@@ -44,7 +40,6 @@ class SimEntityLookupExtensionImp extends Extension {
 
   private val entities = new scala.collection.concurrent.TrieMap[Long, ActorRef]
   private val entitiesNames = new scala.collection.concurrent.TrieMap[String, Long]
-
 
   //TODO handle None results
   def getRefId(name: String) = entitiesNames.get(name)
@@ -81,6 +76,4 @@ object SimEntityLookupExtension extends ExtensionId[SimEntityLookupExtensionImp]
   override def createExtension(system: ExtendedActorSystem) = new SimEntityLookupExtensionImp
 
   //  override def get(system: ActorSystem): SimEntityLookupExtensionImp = super.get(system)
-
-
 }

@@ -4,10 +4,9 @@ import java.io.{FileWriter, PrintWriter}
 import java.nio.file.{Files, Paths}
 
 import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, Props}
-import simakka.SimUtils
 import simakka.config.SimJConfig
-import simakka.core.{SimNames, SimApp}
 import simakka.core.SimConstants._
+import simakka.core.{SimApp, SimUtils}
 
 
 object SimStatCollector {
