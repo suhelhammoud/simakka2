@@ -27,7 +27,7 @@ object LookAhead {
   * @param time if = -1 then remove this lookAhead message
   */
 case class LookAhead(target: Long, time: Double,
-                     step: Double, tag: Int = LookAhead.ONCE) {
+                     step: Double, tag: Int = LookAhead.ONCE) extends Timed {
 
   def isOnce() = tag == LookAhead.ONCE
 

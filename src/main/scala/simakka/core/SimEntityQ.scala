@@ -55,9 +55,9 @@ class SimEntityQ(override val name: String)
 
     case se: SimEvent =>
       handleMessage(se)
-      if (outEvents.nonEmpty) {
-        fel ! outEvents.toList
-        outEvents.clear()
+      if (outMessages.nonEmpty) {
+        fel ! outMessages.toList
+        outMessages.clear()
       }
 
       fel ! Done(me)

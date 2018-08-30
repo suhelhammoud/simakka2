@@ -2,33 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8e4d915f-80a6-405d-a128-e40bd6f8ff0e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/scala/simakka/core/LookAhead.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/SimAkkaAppDriver.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/simakka/SimAkkaAppDriver.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/SimUtils.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/core/PriorityEventQueue.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/simakka/core/PriorityEventQueue.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/core/SimApp.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/simakka/core/SimApp.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/core/SimConstants.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/simakka/core/SimConstants.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/core/SimEmbedQueue.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/core/LookAhead.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/simakka/core/LookAhead.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/core/SimEntity.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/simakka/core/SimEntity.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/core/SimEntityFactory.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/simakka/core/SimEntityFactory.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/core/SimEntityLookup.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/simakka/core/SimEntityLookup.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/core/SimEntityQ.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/simakka/core/SimEntityQ.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/core/SimFEL.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/simakka/core/SimFEL.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/core/SimFELSeq.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/core/SimTrace.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/simakka/core/SimTrace.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/core/SimUtils.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/simakka/core/SimUtils.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/core/Timed.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/simakka/core/Timed.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/distributions/SimRnd.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/simakka/distributions/SimRnd.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/distributions/SimRndContinuousGenerator.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/simakka/distributions/SimRndContinuousGenerator.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/distributions/SimRndDiscreteGenerator.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/simakka/distributions/SimRndDiscreteGenerator.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/distributions/SimRndExp.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/simakka/distributions/SimRndExp.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/distributions/SimRndGenerator.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/simakka/distributions/SimRndGenerator.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/distributions/SimRndUniform.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/simakka/distributions/SimRndUniform.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/examples/mm1/MM1.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/simakka/examples/mm1/MM1.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/core/SimPredicate.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/simakka/core/SimPredicate.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/examples/mm1/MM1Driver.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/simakka/examples/mm1/MM1Driver.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/simakka/stat/SimStatCollector.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/simakka/stat/SimStatCollector.scala" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -160,13 +140,13 @@
     <session id="126024214">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="14" />
+          <entry key="project.closed" value="15" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.6" value="3" />
           <entry key="project.open.time.7" value="5" />
           <entry key="project.open.time.8" value="4" />
-          <entry key="project.open.time.9" value="2" />
-          <entry key="project.opened" value="15" />
+          <entry key="project.open.time.9" value="4" />
+          <entry key="project.opened" value="17" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -174,7 +154,7 @@
           <entry key="csv" value="1" />
           <entry key="java" value="1" />
           <entry key="sbt" value="1" />
-          <entry key="scala" value="196" />
+          <entry key="scala" value="238" />
           <entry key="txt" value="1" />
         </counts>
       </usages-collector>
@@ -183,19 +163,21 @@
           <entry key="CSV" value="1" />
           <entry key="JAVA" value="1" />
           <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Scala" value="196" />
+          <entry key="Scala" value="238" />
           <entry key="sbt" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
+          <entry key="dummy" value="5" />
           <entry key="sbt" value="4" />
-          <entry key="scala" value="14183" />
+          <entry key="scala" value="16074" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Scala" value="14183" />
+          <entry key="PLAIN_TEXT" value="5" />
+          <entry key="Scala" value="16074" />
           <entry key="sbt" value="4" />
         </counts>
       </usages-collector>
@@ -207,10 +189,13 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/draft/toDelete/P1.scala">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/simakka/core/SimEntity.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="435">
-              <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+            <state relative-caret-position="456">
+              <caret line="53" selection-start-line="53" selection-end-line="53" />
+              <folding>
+                <element signature="e#22#85#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -228,7 +213,11 @@
       <find>felQu</find>
       <find>fire</find>
       <find>isAll</find>
+      <find>stash</find>
     </findStrings>
+    <dirStrings>
+      <dir>$PROJECT_DIR$/src/main/scala/simakka/stat</dir>
+    </dirStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -247,15 +236,12 @@
         <option value="$PROJECT_DIR$/src/main/scala/simakka/core/SimEmbedQueue.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/simakka/core/SimFELSeq.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/simakka/core/SimPredicates.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/simakka/core/LookAhead.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/simakka/core/PriorityEventQueue.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/simakka/core/SimApp.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/simakka/core/SimConstants.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/simakka/core/SimEntityFactory.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/simakka/core/SimEntityLookup.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/simakka/core/SimEntityQ.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/simakka/core/SimPredicate.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/simakka/core/SimFEL.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/simakka/core/SimTrace.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/simakka/core/Timed.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/simakka/distributions/SimRnd.scala" />
@@ -273,15 +259,19 @@
         <option value="$PROJECT_DIR$/src/main/scala/simakka/core/SimUtils.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/simakka/toDelete/P1.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/simakka/stat/SimStatCollector.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/simakka/core/LookAhead.scala" />
+        <option value="$PROJECT_DIR$/draft/toDelete/P1.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/simakka/core/SimFEL.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/simakka/core/SimPredicate.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/simakka/core/SimEntity.scala" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="2640" />
-    <option name="y" value="111" />
-    <option name="width" value="720" />
-    <option name="height" value="902" />
+    <option name="x" value="1940" />
+    <option name="y" value="223" />
+    <option name="width" value="1865" />
+    <option name="height" value="789" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -289,14 +279,23 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="simakka2" type="b2602c69:ProjectViewProjectNode" />
               <item name="simakka2" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="simakka2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="simakka2" type="462c0819:PsiDirectoryNode" />
+              <item name="draft" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="simakka2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="simakka2" type="462c0819:PsiDirectoryNode" />
+              <item name="draft" type="462c0819:PsiDirectoryNode" />
+              <item name="toDelete" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="simakka2" type="b2602c69:ProjectViewProjectNode" />
@@ -324,10 +323,21 @@
               <item name="scala" type="462c0819:PsiDirectoryNode" />
               <item name="simakka" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="simakka2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="simakka2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="simakka" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -340,19 +350,20 @@
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/src/main/scala" />
-      <recent name="$PROJECT_DIR$/src" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="simakka.core" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/draft" />
       <recent name="$PROJECT_DIR$/src/main/scala" />
       <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$/src/main/resources" />
       <recent name="$PROJECT_DIR$/data" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="simakka.core" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src/main/scala" />
+      <recent name="$PROJECT_DIR$/src" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -512,10 +523,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1920" y="111" width="1440" height="902" extended-state="6" />
+    <frame x="1920" y="121" width="1440" height="902" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" side_tool="true" visible="true" weight="0.19097222" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" side_tool="true" visible="true" weight="0.22916667" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.24964131" />
       <window_info id="Designer" order="2" />
       <window_info id="UI Designer" order="3" />
@@ -642,20 +653,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/simakka/core/SimEmbedQueue.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="63">
-          <caret line="13" column="6" selection-start-line="13" selection-start-column="6" selection-end-line="13" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/simakka/core/PriorityEventQueue.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="5" column="59" selection-start-line="5" selection-start-column="59" selection-end-line="5" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/simakka/core/SimEmbedQueue.scala" />
     <entry file="file://$PROJECT_DIR$/src/main/scala/simakka/core/SimApp.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="121">
@@ -674,9 +672,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="513">
           <caret line="23" selection-start-line="23" selection-end-line="23" />
-          <folding>
-            <element signature="e#22#68#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -690,34 +685,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/simakka/core/SimFEL.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3750">
-          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
-          <folding>
-            <element signature="e#22#68#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/simakka/core/SimFELSeq.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="16" column="6" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/simakka/core/SimFELSeq.scala" />
     <entry file="file://$PROJECT_DIR$/src/main/scala/simakka/core/SimNames.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="58">
           <caret line="2" column="12" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/simakka/core/SimPredicate.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3422">
-          <caret line="121" lean-forward="true" selection-start-line="121" selection-end-line="121" />
         </state>
       </provider>
     </entry>
@@ -728,13 +700,6 @@
           <folding>
             <element signature="e#22#45#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/simakka/core/Timed.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="672">
-          <caret line="51" selection-start-line="51" selection-end-line="51" />
         </state>
       </provider>
     </entry>
@@ -784,9 +749,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-111">
           <caret line="90" selection-start-line="90" selection-end-line="90" />
-          <folding>
-            <element signature="e#30#53#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -804,13 +766,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/simakka/SimUtils.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="116">
-          <caret line="4" selection-start-line="4" selection-end-line="4" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/simakka/SimUtils.scala" />
     <entry file="file://$PROJECT_DIR$/src/main/scala/simakka/core/SimUtils.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="870">
@@ -825,40 +781,68 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="189">
           <caret line="136" column="12" selection-start-line="136" selection-start-column="12" selection-end-line="136" selection-end-column="12" />
-          <folding>
-            <element signature="e#22#62#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/simakka/core/SimEntity.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="59" column="12" selection-start-line="59" selection-start-column="12" selection-end-line="59" selection-end-column="12" />
-          <folding>
-            <element signature="e#22#78#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/simakka/core/LookAhead.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-401">
-          <caret line="28" column="11" selection-start-line="28" selection-start-column="11" selection-end-line="28" selection-end-column="11" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/simakka/core/SimEntityQ.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="38" column="14" selection-start-line="38" selection-start-column="14" selection-end-line="38" selection-end-column="14" />
+        <state relative-caret-position="304">
+          <caret line="44" selection-start-line="44" selection-end-line="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/simakka/core/Timed.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="58">
+          <caret line="2" column="6" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/simakka/core/PriorityEventQueue.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="145">
+          <caret line="5" column="54" lean-forward="true" selection-start-line="5" selection-start-column="53" selection-end-line="5" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/simakka/core/LookAhead.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="261">
+          <caret line="35" column="58" selection-start-line="35" selection-start-column="43" selection-end-line="35" selection-end-column="58" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/draft/toDelete/P1.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+        <state relative-caret-position="58">
+          <caret line="17" column="20" selection-start-line="17" selection-start-column="17" selection-end-line="17" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/simakka/core/SimFEL.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="377">
+          <caret line="134" column="23" selection-start-line="134" selection-start-column="23" selection-end-line="134" selection-end-column="23" />
+          <folding>
+            <element signature="e#22#68#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/simakka/core/SimPredicate.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="406">
+          <caret line="14" column="2" selection-start-line="14" selection-start-column="2" selection-end-line="14" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/simakka/core/SimEntity.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="456">
+          <caret line="53" selection-start-line="53" selection-end-line="53" />
+          <folding>
+            <element signature="e#22#85#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

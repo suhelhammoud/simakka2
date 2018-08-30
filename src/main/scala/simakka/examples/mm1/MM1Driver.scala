@@ -29,9 +29,9 @@ class MM1Driver(override val name: String,
     case se: SimEvent =>
       log.debug("entity {} received {}", name, se)
       handleMessage(se)
-      if (outEvents.nonEmpty) {
-        fel ! outEvents.toList
-        outEvents.clear()
+      if (outMessages.nonEmpty) {
+        fel ! outMessages.toList
+        outMessages.clear()
       }
       done()
 

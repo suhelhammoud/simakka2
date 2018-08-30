@@ -61,9 +61,11 @@ class SimFEL extends Actor
       case sp: SimTimedPredicate =>
         fireSimPredicate(sp)
 
-      case _ => throw new Exception("Not defined")
+      case _ =>
+        log.error("Unknow extracted message to fire")
+        throw new Exception("Not defined")
     }
-    simTime = nextSimTime
+    simTime = nextSimTime //TODO why not to the last fired event
   }
 
   def fire(v: Any, target: Long): Unit = {
@@ -81,13 +83,16 @@ class SimFEL extends Actor
         lookAheads.remove(target)
       case LookAhead.REPEATED =>
         currents.update(target, time + lh.get.step)
+      case LookAhead.ALL_SAFE =>
+        currents.remove(target)
+
       case _ => {}
     }
   }
 
   def fireSimPredicate(sp: SimTimedPredicate): Unit = {
     val entry = predicates.remove(sp.target)
-    if (entry.isDefined) {
+    if (entry.isDefined) {  //timeout
       lookAheadBeforeFiring(sp.target, sp.time)
       fire(sp, sp.target)
     }
@@ -127,16 +132,19 @@ class SimFEL extends Actor
 
   //ak message
   def handleList(lst: List[Any]) = {
-    if (!(lst.last.isInstanceOf[Long]))
-      throw new Exception("last element in list is not Done ")
-
     val from = lst.last.asInstanceOf[Long]
+//    if (!(lst.last.isInstanceOf[Long]))
+//      throw new Exception("last element in list is not Done ")
+
     currents.remove(from)
 
     lst.asInstanceOf[List].foreach {
       case se: SimEvent =>
         if (se.time >= simTime)
           felQueue += se
+        else
+          log.error("current simTime = {}, new event time = {}",
+            simTime, se.time)
 
       case lh: LookAhead =>
         if (lh.isToRemoveAllSafe)
@@ -148,14 +156,16 @@ class SimFEL extends Actor
         if (p.time >= simTime) {
           predicates.update(p.target, p)
           felQueue += p
-        }
+        }else
+          log.error("current simTime = {}, new event time = {}",
+            simTime, p.time)
 
       case p: SimPredicate =>
         predicates.update(p.target, p)
 
       case id: Long => currents.remove(id) //TODO remove later
 
-      case _ => println(s"message not known {}")
+      case _ => log.error(s"message not known {}")
     }
   }
 }

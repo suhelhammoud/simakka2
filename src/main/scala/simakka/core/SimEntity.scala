@@ -1,9 +1,11 @@
 package simakka.core
 
-import akka.actor.{Actor, ActorLogging, ActorRef, Props}
+import akka.actor.{Actor, ActorLogging, ActorRef, Props, Stash}
 import akka.util.Timeout
 import net.liftweb.json.{DefaultFormats, parse}
 import simakka.config.SimJEntity
+
+import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.duration._
 
@@ -21,7 +23,7 @@ object SimEntity {
     result
   }
 
-  val autoEvents = false //TODO remove it
+  //  val autoEvents = false //TODO remove it
 
   def props(name: String, params: Option[String] = None) =
     Props(classOf[SimEntity], name, params)
@@ -31,7 +33,7 @@ object SimEntity {
 
 class SimEntity(val name: String, params: Option[String] = None)
   extends Actor with SimEntityLookup
-    with ActorLogging with SimTrace with NameMe {
+    with ActorLogging with SimTrace with NameMe with Stash{
 
   val fel: ActorRef = getRef(SimNames.fel.name()).get
 
@@ -39,21 +41,34 @@ class SimEntity(val name: String, params: Option[String] = None)
 
   var simTime = 0.0
   var lastEventTime = 0.0
-  val outEvents = ArrayBuffer[SimEvent]()
+  val outMessages = ArrayBuffer[Any]()
 
-  val autoEvents = true
-  val allowStash = false
+  var lookahead: Option[LookAhead] = None
 
-  var lookahead = 0.0
+  val predicate = new SimPredicateGenerator(me)
+
+  val behaviour = mutable.Map[String, PartialFunction[Any, Unit]]()
+  var lastBehaviour: Option[String] = None
+  var lastPredicate: Option[SimPredicate] = None
+
+  def on(name: String)(pf: PartialFunction[Any, Unit]): Unit = {
+    if (behaviour contains (name))
+      throw new Exception("key already in handlers " + name)
+    behaviour += name -> pf
+  }
 
   //TODO
-  def setLookAhead(lhValue: Double): Unit = {
-    lookahead = lhValue
-    //    fel ! LookAhead(me, lhValue, )
+  def setLookAhead(lh: LookAhead): Unit = {
+    lookahead = Some(lh)
+    outMessages.append(lh)
   }
 
   def removeLookAhead(): Unit = {
-    setLookAhead(-1)
+    if (lookahead.isDefined) {
+      outMessages.append(
+        lookahead.get.copy(tag = LookAhead.REMOVE_All_SAFE))
+    }
+    lookahead = None
   }
 
   def done(): Unit = {
@@ -75,11 +90,38 @@ class SimEntity(val name: String, params: Option[String] = None)
   }
 
 
-  def pause(delay: Double): Unit = {
-    //TODO
+  def pause(delay: Double, behaviour: String): Unit = {
+    val p = predicate.until(simTime + delay)
+    outMessages.append(p)
+    lastBehaviour = Some(behaviour)
+    lastPredicate = Some(p)
+
+    //TODO check that behaviour is actually saved in behaviour map
   }
 
-  def process(delay: Double): Unit = {
+  //  def foo(): Unit = {
+  //    var myvar = 10;
+  //    ;
+  //    process(100, "b1")
+  //    process(50, "b2")
+  //
+  //    //block after perdicate is matched
+  //    //def behaviour b2
+  //    {
+  //
+  //    }
+  //
+  //    on("b2") {
+  //      myvar += 3
+  //    }
+  //
+  //    on("b1") {
+  //      //read myvar
+  //    }
+  //
+  //  }
+
+  def process(delay: Double, behaviour: String): Unit = {
     //TODO
   }
 
@@ -171,11 +213,8 @@ class SimEntity(val name: String, params: Option[String] = None)
     val nextTime = simTime + delay
 
     val ev = SimEvent(nextTime, tag, src, dest, data)
-    if (autoEvents) { //TODO should be available apart from handle message method
-      simTrace("schedule event {}", ev)
-      fel ! ev
-    } else
-      outEvents += ev
+    simTrace("schedule event {}", ev)
+    outMessages += ev
   }
 
   /**
@@ -184,25 +223,76 @@ class SimEntity(val name: String, params: Option[String] = None)
     * @param msg simEvent to be processed
     * @return
     */
-  def handleMessage(msg: SimEvent): Seq[SimEvent] = {
+  def handleMessage(msg: SimEvent) {
     log.debug("handle message {}", msg)
     simTrace("handle message {}", msg)
-    List()
+
+    var localValue = 2
+
+    pause(10, "b1")
+
+    on("b1"){
+      case se:SimEvent if se.tag == 10 =>
+        log.info("test")
+      case l: Long => println("ok")
+      case i: Int =>
+        localValue +=2
+        pause(20, "b2")
+    }
+
+    on("b2"){
+      case se: SimEvent if se.src == 20 => _
+
+      case t: Timed if t.time < 500 =>
+
+        predicate.notForTag(5).
+
+    }
+
+
+  }
+
+  def setBehaviour(b: String): Unit ={
+    context.become(behaviour.get(b).get)
   }
 
   override def receive: Receive = {
 
+    case m: Any =>
+      if(lastPredicate.isDefined) {
+        if(m.isInstanceOf[SimEvent]) {
+          if( !lastPredicate.get
+            .isMatching(m.asInstanceOf[SimEvent])) {
+            stash()
+
+          }else{
+            setBehaviour(lastBehaviour.get)
+            unstashAll()
+          }
+        }
+      }
     case se: SimEvent =>
+
+      //
+      context.become(behaviour.get(lastBehaviour.get).get)
+
       log.debug("entity {} received {}", name, se)
-      lastEventTime = simTime
-      simTime = se.time
+      if (se.time > simTime) {
+        lastEventTime = simTime
+        simTime = se.time
+      }
+
 
       handleMessage(se)
-      if (outEvents.nonEmpty) {
-        fel ! outEvents.toList
-        outEvents.clear()
+
+      if (lookahead.isDefined
+        && lookahead.get.isAllSafe()) {
+        //Do nothing
+      } else {
+        outMessages.append(me)
+        fel ! outMessages.toList
+        outMessages.clear()
       }
-      done()
 
     case _ => log.debug("received a message")
   }

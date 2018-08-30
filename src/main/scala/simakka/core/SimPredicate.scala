@@ -11,6 +11,8 @@ trait SimTimedPredicate extends SimPredicate with Timed {
 
   def getLookAhead() = {
   }
+
+
 }
 
 trait Repeated {
@@ -50,7 +52,7 @@ object SimPredicate {
 case class SimPredicateDone(val target: Long, val time: Double) extends Timed
 
 case class Until(val target: Long, val time: Double)
-  extends SimPredicate with Timed {
+  extends SimTimedPredicate {
   override def isMatching(se: SimEvent): Boolean =
     se.time >= time
 }
@@ -85,7 +87,7 @@ case class NoneMessage(val target: Long) extends SimPredicate {
 }
 
 case class UntilOrFrom(val target: Long, val time: Double, ids: List[Long])
-  extends SimPredicate with Timed {
+  extends SimTimedPredicate {
   override def isMatching(se: SimEvent): Boolean =
     se.time >= time || ids.contains(se.dest)
 }
@@ -109,13 +111,13 @@ case class NotForTag(val target: Long, val tags: List[Int])
 }
 
 case class ForTagUntil(val target: Long, val time: Double, val tags: List[Int])
-  extends SimPredicate with Timed {
+  extends SimTimedPredicate {
   override def isMatching(se: SimEvent): Boolean =
     tags.contains(se.tag) || se.time >= time
 }
 
 case class NotForTagUntil(val target: Long, val time: Double, val tags: List[Int])
-  extends SimPredicate with Timed {
+  extends SimTimedPredicate {
   override def isMatching(se: SimEvent): Boolean =
     !(tags.contains(se.tag)) || se.time >= time
 }
