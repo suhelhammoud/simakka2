@@ -11,6 +11,8 @@ trait Timed {
 }
 
 object SimEvent {
+  final val NONE = SimEvent(0,0,0,0,None)
+
   val PAUSE = -100
   val PROCESS = -101
 }

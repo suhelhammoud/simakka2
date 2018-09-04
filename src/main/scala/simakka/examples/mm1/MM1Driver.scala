@@ -1,7 +1,8 @@
 package simakka.examples.mm1
 
 import akka.actor.Props
-import simakka.core.{SimEntity, SimEvent}
+import simakka.core.SimEntity
+import simakka.core.SimPredicateGenerator.DEFAULT
 import simakka.distributions.SimRndExp
 
 object MM1Driver {
@@ -25,18 +26,19 @@ class MM1Driver(override val name: String,
     })
   }
 
-  override def receive: Receive = {
-    case se: SimEvent =>
-      log.debug("entity {} received {}", name, se)
-      handleMessage(se)
-      if (outMessages.nonEmpty) {
-        fel ! outMessages.toList
-        outMessages.clear()
-      }
-      done()
 
-    case _ =>
-      simTrace("Start Events")
-      startEvents()
+  override def defineBehaviours(): Unit = {
+    var numEvents = 0
+
+    on(DEFAULT) {
+      case m: Any =>
+        numEvents += 1
+        simTrace("Driver numEvents ={}, at time = {}", numEvents, simTime)
+        val event = scheduleName(0, 3, "mm1")
+        simTrace("{} : Driver schedule event {} ", simTime, event)
+        pause(10)
+    }
   }
+
+
 }

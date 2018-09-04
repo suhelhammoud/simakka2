@@ -132,7 +132,7 @@ class SimFEL extends Actor
 
   //ak message
   def handleList(lst: List[Any]) = {
-    val from = lst.last.asInstanceOf[Long]
+    val from = lst.head.asInstanceOf[Long]
 //    if (!(lst.last.isInstanceOf[Long]))
 //      throw new Exception("last element in list is not Done ")
 

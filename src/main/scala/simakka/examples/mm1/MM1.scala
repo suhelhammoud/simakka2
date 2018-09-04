@@ -88,17 +88,7 @@ class MM1(override val name: String, params: Option[String])
     log.debug("initParams with data = {}", data)
   }
 
-  /**
-    * Entity Logic
-    *
-    * @param msg simEvent to be processed
-    * @return
-    */
-  override def handleMessage(msg: SimEvent): Seq[SimEvent] = {
-    simTraceTag("EVENT", msg.toString)
-    scheduleID(0, 1000, msg.src)
-    Nil
-  }
+
 
   //  override def receive: Receive = {
   //    case a: MM1.Arrive =>

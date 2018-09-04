@@ -5,7 +5,6 @@ import akka.util.Timeout
 import net.liftweb.json.{DefaultFormats, parse}
 import simakka.config.SimJEntity
 
-import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.duration._
 
@@ -28,12 +27,17 @@ object SimEntity {
   def props(name: String, params: Option[String] = None) =
     Props(classOf[SimEntity], name, params)
 
-  // if time < 0 done is true
 }
 
 class SimEntity(val name: String, params: Option[String] = None)
   extends Actor with SimEntityLookup
-    with ActorLogging with SimTrace with NameMe with Stash{
+    with ActorLogging with SimTrace with NameMe with Stash {
+
+  import SimPredicateGenerator.DEFAULT
+
+  /*Used as timeout for synchronous calls*/
+  implicit val timeout = Timeout(10 seconds)
+
 
   val fel: ActorRef = getRef(SimNames.fel.name()).get
 
@@ -47,14 +51,14 @@ class SimEntity(val name: String, params: Option[String] = None)
 
   val predicate = new SimPredicateGenerator(me)
 
-  val behaviour = mutable.Map[String, PartialFunction[Any, Unit]]()
-  var lastBehaviour: Option[String] = None
-  var lastPredicate: Option[SimPredicate] = None
+  if (params.nonEmpty)
+    initParams(params.get)
 
-  def on(name: String)(pf: PartialFunction[Any, Unit]): Unit = {
-    if (behaviour contains (name))
-      throw new Exception("key already in handlers " + name)
-    behaviour += name -> pf
+  defineBehaviours()
+
+
+  def on(behaviourName: String)(pf: PartialFunction[Any, Unit]): Unit = {
+    predicate.on(behaviourName)(pf)
   }
 
   //TODO
@@ -71,55 +75,27 @@ class SimEntity(val name: String, params: Option[String] = None)
     lookahead = None
   }
 
-  def done(): Unit = {
-    fel ! me
-  }
-
-  /*Used as timeout for synchronous calls*/
-  implicit val timeout = Timeout(10 seconds)
-
-  //  def sendOutEvents(s: Seq[SimEvent]): Unit = {
-  //    fel ! s
-  //  }
-
-  if (params.nonEmpty)
-    initParams(params.get)
-
   def initParams(data: String): Unit = {
     log.debug("initParams({})", data)
   }
 
-
-  def pause(delay: Double, behaviour: String): Unit = {
-    val p = predicate.until(simTime + delay)
-    outMessages.append(p)
-    lastBehaviour = Some(behaviour)
-    lastPredicate = Some(p)
-
-    //TODO check that behaviour is actually saved in behaviour map
+  def defineBehaviours(): Unit = {
+    log.debug("Entity {}, defineBehaviours ", name)
+    //
+    //    var someVariable = 3L
+    //
+    //    predicate.notForTag(4, 5)
+    //
+    //    predicate.on(DEFAULT) {
+    //      case a: Any =>
+    //        someVariable += 1
+    //        println("defalt behaviour")
+    //    }
   }
 
-  //  def foo(): Unit = {
-  //    var myvar = 10;
-  //    ;
-  //    process(100, "b1")
-  //    process(50, "b2")
-  //
-  //    //block after perdicate is matched
-  //    //def behaviour b2
-  //    {
-  //
-  //    }
-  //
-  //    on("b2") {
-  //      myvar += 3
-  //    }
-  //
-  //    on("b1") {
-  //      //read myvar
-  //    }
-  //
-  //  }
+  def pause(delay: Double, behaviour: String = DEFAULT): Unit = {
+    predicate.until(simTime + delay)(behaviour)
+  }
 
   def process(delay: Double, behaviour: String): Unit = {
     //TODO
@@ -136,7 +112,7 @@ class SimEntity(val name: String, params: Option[String] = None)
     * @param tag
     * @param data
     */
-  def scheduleLocal(delay: Double, tag: Int, data: Option[Any] = None): Unit = {
+  def scheduleLocal(delay: Double, tag: Int, data: Option[Any] = None): SimEvent = {
     schedule(delay, tag, me, me, data)
   }
 
@@ -148,7 +124,7 @@ class SimEntity(val name: String, params: Option[String] = None)
     * @param dest
     * @param data
     */
-  def scheduleID(delay: Double, tag: Int, dest: Long, data: Option[Any] = None): Unit = {
+  def scheduleID(delay: Double, tag: Int, dest: Long, data: Option[Any] = None): SimEvent = {
     schedule(delay, tag, me, dest, data)
   }
 
@@ -160,12 +136,13 @@ class SimEntity(val name: String, params: Option[String] = None)
     * @param dest
     * @param data
     */
-  def scheduleName(delay: Double, tag: Int, dest: String, data: Option[Any] = None): Unit = {
+  def scheduleName(delay: Double, tag: Int, dest: String, data: Option[Any] = None): SimEvent = {
     //    val thatId = entitiesNames.get(toS)
     val to = getRefId(dest)
 
     if (to == None) {
       log.error("Could not find id for on of actor : {}", dest)
+      SimEvent.NONE
     } else {
       schedule(delay, tag, me, to.get, data)
     }
@@ -180,7 +157,7 @@ class SimEntity(val name: String, params: Option[String] = None)
     * @param dest
     * @param data
     */
-  def scheduleName(delay: Double, tag: Int, src: String, dest: String, data: Option[Any]): Unit = {
+  def scheduleName(delay: Double, tag: Int, src: String, dest: String, data: Option[Any]): SimEvent = {
 
     val from = getRefId(src)
     val to = getRefId(dest)
@@ -188,6 +165,7 @@ class SimEntity(val name: String, params: Option[String] = None)
     if (from == None || to == None) {
       //TODO use getRef() methods here
       log.error("Could not find id for on of actors : {}, {}", src, dest)
+      SimEvent.NONE
     } else {
       schedule(delay, tag, from.get, to.get, data)
     }
@@ -206,95 +184,55 @@ class SimEntity(val name: String, params: Option[String] = None)
                tag: Int,
                src: Long,
                dest: Long,
-               data: Option[Any] = None): Unit = {
+               data: Option[Any] = None): SimEvent = {
 
     //    assert(delay >= 0 || containsRef(src) || containsRef(dest))
 
     val nextTime = simTime + delay
-
     val ev = SimEvent(nextTime, tag, src, dest, data)
-    simTrace("schedule event {}", ev)
     outMessages += ev
+    ev
   }
 
-  /**
-    * Entity Logic
-    *
-    * @param msg simEvent to be processed
-    * @return
-    */
-  def handleMessage(msg: SimEvent) {
-    log.debug("handle message {}", msg)
-    simTrace("handle message {}", msg)
-
-    var localValue = 2
-
-    pause(10, "b1")
-
-    on("b1"){
-      case se:SimEvent if se.tag == 10 =>
-        log.info("test")
-      case l: Long => println("ok")
-      case i: Int =>
-        localValue +=2
-        pause(20, "b2")
-    }
-
-    on("b2"){
-      case se: SimEvent if se.src == 20 => _
-
-      case t: Timed if t.time < 500 =>
-
-        predicate.notForTag(5).
-
-    }
-
-
-  }
-
-  def setBehaviour(b: String): Unit ={
-    context.become(behaviour.get(b).get)
-  }
 
   override def receive: Receive = {
 
-    case m: Any =>
-      if(lastPredicate.isDefined) {
-        if(m.isInstanceOf[SimEvent]) {
-          if( !lastPredicate.get
-            .isMatching(m.asInstanceOf[SimEvent])) {
-            stash()
+    case m: Timed =>
 
-          }else{
-            setBehaviour(lastBehaviour.get)
-            unstashAll()
-          }
-        }
-      }
-    case se: SimEvent =>
+      if (predicate.isPredicateActive) {
+        if (predicate.isMatching(m)) {
+          predicate.done()
+          unstashAll()
+          //TODO check akka documentaiton examples
+        } else stash() //predicate is not matched
 
-      //
-      context.become(behaviour.get(lastBehaviour.get).get)
-
-      log.debug("entity {} received {}", name, se)
-      if (se.time > simTime) {
-        lastEventTime = simTime
-        simTime = se.time
-      }
-
-
-      handleMessage(se)
-
-      if (lookahead.isDefined
-        && lookahead.get.isAllSafe()) {
-        //Do nothing
       } else {
-        outMessages.append(me)
-        fel ! outMessages.toList
-        outMessages.clear()
+        //TODO update stats
+
+        //update time
+        if (m.time > simTime) {
+          lastEventTime = simTime
+          simTime = m.time
+        }
+
+        //handle message
+        handle(m)
       }
 
-    case _ => log.debug("received a message")
+    case m: Any =>
+      log.error("Entity name {} , received unknown message = {}", name, m)
+  }
+
+  def handle(m: Timed): Unit = {
+    if (lookahead.isDefined
+      && lookahead.get.isAllSafe()) {
+      //Do nothing
+    } else {
+      outMessages.append(me)
+      predicate.handleMessage(m)
+      fel ! outMessages.toList
+      outMessages.clear()
+    }
   }
 
   def toSting() = {
