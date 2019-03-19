@@ -1,6 +1,6 @@
 ## Simakka2: Semi-Distributed Discrete Event Engine using Akka actors  
 
-### Objectives ( Nothing is implemented yet)
+### Objectives:
 
 * Targets multi-core PCs
 * Define more light-weight entities to allow simulating millions of them at the same time.
@@ -14,7 +14,7 @@
 * Simple DSL for common simulation behaviours
 * To be easy to integrate with jvm based systems.
 
-## Requirement 
+## Requirements
 TODO provide sbt file
 
 * Java virtual machine: Java8 or Java9
